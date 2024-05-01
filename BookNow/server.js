@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const courses = require('./routes/clients');
-const home = require('./routes/providers');
+const clients = require('./routes/clients');
+const providers = require('./routes/providers');
 const express = require('express');
 const app = express();
 
