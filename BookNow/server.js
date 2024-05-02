@@ -18,6 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 // routes
 // TODO: add routes
 app.use('/api/clients', clients);
+app.use('/api/providers', providers);
 
 // host and port
 const hostname = '127.0.0.1';

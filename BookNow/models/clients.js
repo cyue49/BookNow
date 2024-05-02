@@ -157,7 +157,7 @@ const Client = mongoose.model('client', new mongoose.Schema({
     address: [addressSchema],
     payment: [paymentSchema],
     recipient: [recipientSchema]
-}))
+}));
 
 function validateClient(client, operation) {
     // user 
