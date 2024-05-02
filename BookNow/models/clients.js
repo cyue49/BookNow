@@ -181,9 +181,21 @@ function validateClientUpdateNewAddress(client){
 }
 
 // validate function for put new payment
+function validateClientUpdateNewPayment(client){
+    const schema = Joi.object({
+        payment: Joi.array().items({
+            paymentMethod: Joi.string().required(),
+            cardNumber: Joi.string().pattern(/^[0-9]{16}$/).required(),
+            expirationDate: Joi.date().required(),
+            cvv: Joi.string().pattern(/^[0-9]{3,4}$/).required()
+        }).required()
+    });
 
+    return schema.validate(client);
+}
 
 exports.Client = Client;
 exports.validateAdd = validateClientAdd;
 exports.validateUpdate = validateClientUpdate;
 exports.validateUpdateNewAddress = validateClientUpdateNewAddress;
+exports.validateUpdateNewPayment = validateClientUpdateNewPayment;
