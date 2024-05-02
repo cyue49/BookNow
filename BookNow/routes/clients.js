@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { Client, validateAdd, validateUpdate, validateUpdateNewAddress, validateUpdateNewPayment, validateUpdateNewRecipient } = require('../models/clients');
+const { Client, validate } = require('../models/clients');
 const express = require('express');
 const router = express.Router();
 
@@ -43,7 +43,7 @@ router.get('/:id/recipients', async (req, res) => {
 // add a new client user
 router.post('/', async (req, res) => {
     // input validation
-    const { error } = validateAdd(req.body);
+    const { error } = validate(req.body, 'createUser');
     if (error) return res.status(400).send(error.details[0].message);
 
     // create a new client
@@ -74,7 +74,7 @@ router.post('/', async (req, res) => {
 // update general client info
 router.put('/:id', async (req, res) => {
     // input validation
-    const { error } = validateUpdate(req.body);
+    const { error } = validate(req.body, 'updateUser');
     if (error) return res.status(400).send(error.details[0].message);
 
     try {
@@ -110,7 +110,7 @@ router.put('/:id', async (req, res) => {
 // update client address
 router.put('/:id/addresses/update/:addrID', async (req, res) => {
     // input validation
-    const { error } = validateUpdate(req.body);
+    const { error } = validate(req.body, 'updateAddress');
     if (error) return res.status(400).send(error.details[0].message);
 
     try {
@@ -145,7 +145,7 @@ router.put('/:id/addresses/update/:addrID', async (req, res) => {
 // add new client address
 router.put('/:id/addresses/add', async (req, res) => {
     // input validation
-    const { error } = validateUpdateNewAddress(req.body);
+    const { error } = validate(req.body, 'updateAddress');
     if (error) return res.status(400).send(error.details[0].message);
 
     try {
@@ -194,7 +194,7 @@ router.put('/:id/addresses/remove/:addrID', async (req, res) => {
 // update client payment
 router.put('/:id/payments/update/:payID', async (req, res) => {
     // input validation
-    const { error } = validateUpdate(req.body);
+    const { error } = validate(req.body, 'updatePayment');
     if (error) return res.status(400).send(error.details[0].message);
 
     try {
@@ -226,7 +226,7 @@ router.put('/:id/payments/update/:payID', async (req, res) => {
 // add new client payment
 router.put('/:id/payments/add', async (req, res) => {
     // input validation
-    const { error } = validateUpdateNewPayment(req.body);
+    const { error } = validate(req.body, 'updatePayment');
     if (error) return res.status(400).send(error.details[0].message);
 
     try {
@@ -275,7 +275,7 @@ router.put('/:id/payments/remove/:payID', async (req, res) => {
 // update client recipient
 router.put('/:id/recipients/update/:recID', async (req, res) => {
     // input validation
-    const { error } = validateUpdate(req.body);
+    const { error } = validate(req.body, 'updateRecipient');
     if (error) return res.status(400).send(error.details[0].message);
 
     try {
@@ -311,7 +311,7 @@ router.put('/:id/recipients/update/:recID', async (req, res) => {
 // add new client recipient
 router.put('/:id/recipients/add', async (req, res) => {
     // input validation
-    const { error } = validateUpdateNewRecipient(req.body);
+    const { error } = validate(req.body, 'updateRecipient');
     if (error) return res.status(400).send(error.details[0].message);
 
     try {
