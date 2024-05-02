@@ -55,7 +55,38 @@ router.post('/', async (req, res) => {
 });
 
 // ===================================== PUT =====================================
-// update provider client info
+// update general provider info
+router.put('/:id', async (req, res) => {
+    // input validation
+    const { error } = validate(req.body, 'updateProvider');
+    if (error) return res.status(400).send(error.details[0].message);
+
+    try {
+        // find user to update
+        const provider = await Provider.findByIdAndUpdate(req.params.id,
+            {
+                $set: {
+                    email: req.body.email,
+                    phone: req.body.phone,
+                    firstName: req.body.firstName,
+                    lastName: req.body.lastName,
+                    gender: req.body.gender,
+                    dateOfBirth: req.body.dateOfBirth,
+                    bio: req.body.bio,
+                    addresses: req.body.addresses
+                }
+            }
+        );
+
+        // if no provider of this id
+        if (!provider) return res.status(400).send("No provider of this id exists.");
+
+        console.log(provider);
+        res.send(provider);
+    } catch (e) {
+        return res.status(400).send("No provider of this id exists.");
+    }
+});
 
 // export router
 module.exports = router;
