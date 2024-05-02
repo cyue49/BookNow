@@ -233,6 +233,28 @@ router.put('/:id/payments/add', async (req, res) => {
     }
 });
 
+// delete a client payment
+router.put('/:id/payments/remove/:payID', async (req, res) => {
+    try {
+        // find user to update
+        const client = await Client.findByIdAndUpdate(req.params.id,
+            {
+                $pull: {
+                    payment: {_id: req.params.payID}
+                }
+            }
+        );
+
+        // if no client of this id
+        if (!client) return res.status(400).send("No client of this id exists.");
+
+        console.log(client);
+        res.send(client);
+    } catch (e) {
+        return res.status(400).send("No client of this id exists.");
+    }
+});
+
 // ===================================== DELETE =====================================
 // delete a client user by id
 router.delete('/:id', async (req, res) => {
