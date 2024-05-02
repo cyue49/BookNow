@@ -11,6 +11,20 @@ router.get('/', async (req, res) => {
     res.send(providers);
 });
 
+// get a specific provider by id
+router.get('/:id', async (req, res) => {
+    const provider = await Provider.find({ _id: req.params.id });
+    console.log(provider);
+    res.send(provider);
+});
+
+// get all addresses for a provider
+router.get('/:id/addresses', async (req, res) => {
+    const addresses = await Provider.find({ _id: req.params.id }).select('addresses');
+    console.log(addresses);
+    res.send(addresses);
+});
+
 // ===================================== POST =====================================
 // add a new provider user
 router.post('/', async (req, res) => {
@@ -39,6 +53,9 @@ router.post('/', async (req, res) => {
         res.status(400).send(ex.message);
     }
 });
+
+// ===================================== PUT =====================================
+// update provider client info
 
 // export router
 module.exports = router;
