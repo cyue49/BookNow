@@ -62,7 +62,7 @@ router.put('/:id', async (req, res) => {
             }
         );
 
-        // if no course of this id
+        // if no client of this id
         if (!client) return res.status(400).send("No client of this id exists.");
 
         console.log(client);
@@ -97,7 +97,7 @@ router.put('/:id/addresses/:addrID', async (req, res) => {
             }
         );
 
-        // if no course of this id
+        // if no client of this id
         if (!client) return res.status(400).send("No client of this id exists.");
 
         console.log(client);
@@ -123,7 +123,7 @@ router.put('/:id/addresses', async (req, res) => {
             }
         );
 
-        // if no course of this id
+        // if no client of this id
         if (!client) return res.status(400).send("No client of this id exists.");
 
         console.log(client);
