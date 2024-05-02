@@ -32,6 +32,29 @@ const addressSchema = new mongoose.Schema({
     }
 });
 
+// Payment schema
+const paymentSchema = new mongoose.Schema({
+    paymentMethod: {
+        type: String,
+        required: true,
+        enum: ['visa', 'mastercard']
+    },
+    cardNumber: {
+        type: String,
+        required: true,
+        match: /^[0-9]{16}$/
+    },
+    expirationDate: {
+        type: Date,
+        required: true
+    },
+    cvv: {
+        type: String,
+        required: true,
+        match: /^[0-9]{3,4}$/
+    }
+});
+
 // Client schema
 const Client = mongoose.model('client', new mongoose.Schema({
     email: {
@@ -76,7 +99,8 @@ const Client = mongoose.model('client', new mongoose.Schema({
         maxlength: 500,
         trim: true
     },
-    address: [addressSchema]
+    address: [addressSchema],
+    payment: [paymentSchema]
 }))
 
 // validate function for POST
@@ -97,6 +121,12 @@ function validateClientAdd(client){
             province: Joi.string().pattern(/^[A-Z]{2}$/).required(),
             country: Joi.string().required(),
             postalCode: Joi.string().pattern(/^[A-Z][0-9][A-Z][0-9][A-Z][0-9]$/).required()
+        }),
+        payment: Joi.array().items({
+            paymentMethod: Joi.string().required(),
+            cardNumber: Joi.string().pattern(/^[0-9]{16}$/).required(),
+            expirationDate: Joi.date().required(),
+            cvv: Joi.string().pattern(/^[0-9]{3,4}$/).required()
         })
     });
 
@@ -121,6 +151,12 @@ function validateClientUpdate(client){
             province: Joi.string().pattern(/^[A-Z]{2}$/).required(),
             country: Joi.string().required(),
             postalCode: Joi.string().pattern(/^[A-Z][0-9][A-Z][0-9][A-Z][0-9]$/).required()
+        }),
+        payment: Joi.array().items({
+            paymentMethod: Joi.string().required(),
+            cardNumber: Joi.string().pattern(/^[0-9]{16}$/).required(),
+            expirationDate: Joi.date().required(),
+            cvv: Joi.string().pattern(/^[0-9]{3,4}$/).required()
         })
     });
 

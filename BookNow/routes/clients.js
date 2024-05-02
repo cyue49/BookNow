@@ -41,7 +41,8 @@ router.post('/', async (req, res) => {
         gender: req.body.gender,
         dateOfBirth: req.body.dateOfBirth,
         medicalConditions: req.body.medicalConditions,
-        address: req.body.address
+        address: req.body.address,
+        payment: req.body.payment
     });
 
     try {
@@ -73,7 +74,8 @@ router.put('/:id', async (req, res) => {
                     gender: req.body.gender,
                     dateOfBirth: req.body.dateOfBirth,
                     medicalConditions: req.body.medicalConditions,
-                    address: req.body.address
+                    address: req.body.address,
+                    payment: req.body.payment
                 }
             }
         );
