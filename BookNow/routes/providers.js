@@ -21,7 +21,13 @@ router.post('/', async (req, res) => {
     // create a new provider
     const provider = new Provider({
         email: req.body.email,
-        phone: req.body.phone
+        phone: req.body.phone,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        gender: req.body.gender,
+        dateOfBirth: req.body.dateOfBirth,
+        bio: req.body.bio,
+        addresses: req.body.addresses,
     });
 
     try {
