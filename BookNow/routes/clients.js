@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { Client, validateAdd, validateUpdate, validateUpdateNewAddress, validateUpdateNewPayment } = require('../models/clients');
+const { Client, validateAdd, validateUpdate, validateUpdateNewAddress, validateUpdateNewPayment, validateUpdateNewRecipient } = require('../models/clients');
 const express = require('express');
 const router = express.Router();
 
@@ -288,6 +288,32 @@ router.put('/:id/recipients/update/:recID', async (req, res) => {
             },
             {
                 'arrayFilters': [{ "rec._id": req.params.recID }]
+            }
+        );
+
+        // if no client of this id
+        if (!client) return res.status(400).send("No client of this id exists.");
+
+        console.log(client);
+        res.send(client);
+    } catch (e) {
+        return res.status(400).send("No client of this id exists.");
+    }
+});
+
+// add new client recipient
+router.put('/:id/recipients/add', async (req, res) => {
+    // input validation
+    const { error } = validateUpdateNewRecipient(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    try {
+        // find user to update
+        const client = await Client.findByIdAndUpdate(req.params.id,
+            {
+                $push: {
+                    recipient: req.body.recipient
+                }
             }
         );
 

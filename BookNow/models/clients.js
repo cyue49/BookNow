@@ -270,8 +270,27 @@ function validateClientUpdateNewPayment(client) {
     return schema.validate(client);
 }
 
+// validate function for put new recipient
+function validateClientUpdateNewRecipient(client) {
+    const schema = Joi.object({
+        recipient: Joi.array().items({
+            firstName: Joi.string().required(),
+            lastName: Joi.string().required(),
+            email: Joi.string().pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/),
+            phone: Joi.string().pattern(/^[0-9]{10}$/),
+            relationship: Joi.string().valid('family', 'friend', 'other').required(),
+            gender: Joi.string().valid('male', 'female', 'other'),
+            dateOfBirth: Joi.date().less('now'),
+            medicalConditions: Joi.string()
+        }).required()
+    });
+
+    return schema.validate(client);
+}
+
 exports.Client = Client;
 exports.validateAdd = validateClientAdd;
 exports.validateUpdate = validateClientUpdate;
 exports.validateUpdateNewAddress = validateClientUpdateNewAddress;
 exports.validateUpdateNewPayment = validateClientUpdateNewPayment;
+exports.validateUpdateNewRecipient = validateClientUpdateNewRecipient;
