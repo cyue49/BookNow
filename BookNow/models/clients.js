@@ -115,12 +115,12 @@ function validateClientUpdate(client){
         medicalConditions: Joi.string(),
         address: Joi.array().items({
             unitNumber: Joi.number(),
-            streetNumber: Joi.number(),
-            streetName: Joi.string(),
-            city: Joi.string(),
-            province: Joi.string().pattern(/^[A-Z]{2}$/),
-            country: Joi.string(),
-            postalCode: Joi.string().pattern(/^[A-Z][0-9][A-Z][0-9][A-Z][0-9]$/)
+            streetNumber: Joi.number().required(),
+            streetName: Joi.string().required(),
+            city: Joi.string().required(),
+            province: Joi.string().pattern(/^[A-Z]{2}$/).required(),
+            country: Joi.string().required(),
+            postalCode: Joi.string().pattern(/^[A-Z][0-9][A-Z][0-9][A-Z][0-9]$/).required()
         })
     });
 
