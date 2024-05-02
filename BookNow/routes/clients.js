@@ -107,5 +107,8 @@ router.put('/:id/addresses/:addrID', async (req, res) => {
     }
 });
 
+// add new client address
+
+
 // export router
 module.exports = router;
