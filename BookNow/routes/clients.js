@@ -18,6 +18,13 @@ router.get('/:id', async (req, res) => {
     res.send(client);
 });
 
+// get all addresses for a client
+router.get('/:id/addresses', async (req, res) => {
+    const addresses = await Client.find({ _id: req.params.id }).select('address');
+    console.log(addresses);
+    res.send(addresses);
+});
+
 // ===================================== POST =====================================
 // add a new client user
 router.post('/', async (req, res) => {
