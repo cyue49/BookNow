@@ -80,7 +80,6 @@ const recipientSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        required: true,
         minlength: 1,
         maxlength: 50,
         match: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
@@ -96,6 +95,18 @@ const recipientSchema = new mongoose.Schema({
         type: String,
         required: true,
         enum: ['family', 'friend', 'other'],
+        trim: true
+    },
+    gender: {
+        type: String,
+        enum: ['male', 'female', 'other']
+    },
+    dateOfBirth: {
+        type: Date
+    },
+    medicalConditions: {
+        type: String,
+        maxlength: 500,
         trim: true
     }
 });
