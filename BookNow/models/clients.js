@@ -165,7 +165,7 @@ function validateClientAdd(client){
         phone: Joi.string().pattern(/^[0-9]{10}$/).required(),
         firstName: Joi.string().required(),
         lastName: Joi.string().required(),
-        gender: Joi.string(),
+        gender: Joi.string().valid('male', 'female', 'other'),
         dateOfBirth: Joi.date().less('now'),
         medicalConditions: Joi.string(),
         address: Joi.array().items({
@@ -178,7 +178,7 @@ function validateClientAdd(client){
             postalCode: Joi.string().pattern(/^[A-Z][0-9][A-Z][0-9][A-Z][0-9]$/).required()
         }),
         payment: Joi.array().items({
-            paymentMethod: Joi.string().required(),
+            paymentMethod: Joi.string().valid('visa', 'mastercard').required(),
             cardNumber: Joi.string().pattern(/^[0-9]{16}$/).required(),
             expirationDate: Joi.date().required(),
             cvv: Joi.string().pattern(/^[0-9]{3,4}$/).required()
@@ -195,7 +195,7 @@ function validateClientUpdate(client){
         phone: Joi.string().pattern(/^[0-9]{10}$/),
         firstName: Joi.string(),
         lastName: Joi.string(),
-        gender: Joi.string(),
+        gender: Joi.string().valid('male', 'female', 'other'),
         dateOfBirth: Joi.date().less('now'),
         medicalConditions: Joi.string(),
         address: Joi.array().items({
@@ -208,7 +208,7 @@ function validateClientUpdate(client){
             postalCode: Joi.string().pattern(/^[A-Z][0-9][A-Z][0-9][A-Z][0-9]$/).required()
         }),
         payment: Joi.array().items({
-            paymentMethod: Joi.string().required(),
+            paymentMethod: Joi.string().valid('visa', 'mastercard').required(),
             cardNumber: Joi.string().pattern(/^[0-9]{16}$/).required(),
             expirationDate: Joi.date().required(),
             cvv: Joi.string().pattern(/^[0-9]{3,4}$/).required()
@@ -239,7 +239,7 @@ function validateClientUpdateNewAddress(client){
 function validateClientUpdateNewPayment(client){
     const schema = Joi.object({
         payment: Joi.array().items({
-            paymentMethod: Joi.string().required(),
+            paymentMethod: Joi.string().valid('visa', 'mastercard').required(),
             cardNumber: Joi.string().pattern(/^[0-9]{16}$/).required(),
             expirationDate: Joi.date().required(),
             cvv: Joi.string().pattern(/^[0-9]{3,4}$/).required()
