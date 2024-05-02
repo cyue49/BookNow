@@ -149,5 +149,19 @@ router.put('/:id/addresses', async (req, res) => {
     }
 });
 
+// ===================================== DELETE =====================================
+// delete a client user by id
+router.delete('/:id', async (req, res) => {
+    try {
+        const client = await Client.findByIdAndDelete(req.params.id);
+
+        if (!client) return res.status(400).send("No client of this id exists.");
+        console.log(client);
+        res.send(client);
+    } catch (e) {
+        return res.status(400).send("No client of this id exists.");
+    }
+});
+
 // export router
 module.exports = router;
