@@ -8,7 +8,13 @@ router.get('/', async (req, res) => {
     const clients = await Client.find();
     console.log(clients);
     res.send(clients);
-})
+});
+
+router.get('/:id', async (req, res) => {
+    const clients = await Client.find({ _id: req.params.id });
+    console.log(clients);
+    res.send(clients);
+});
 
 // POST
 router.post('/', async (req, res) => {
@@ -93,7 +99,7 @@ router.put('/:id/addresses/:addrID', async (req, res) => {
                 }
             },
             {
-                'arrayFilters': [{"addr._id": req.params.addrID}]
+                'arrayFilters': [{ "addr._id": req.params.addrID }]
             }
         );
 
