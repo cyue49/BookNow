@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { Client, validateAdd, validateUpdate } = require('../models/clients');
+const { Client, validateAdd, validateUpdate, validateUpdateNewAddress } = require('../models/clients');
 const express = require('express');
 const router = express.Router();
 
@@ -108,7 +108,30 @@ router.put('/:id/addresses/:addrID', async (req, res) => {
 });
 
 // add new client address
+router.put('/:id/addresses', async (req, res) => {
+    // input validation
+    const { error } = validateUpdateNewAddress(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
 
+    try {
+        // find user to update
+        const client = await Client.findByIdAndUpdate(req.params.id,
+            {
+                $push: {
+                    address: req.body.address
+                }
+            }
+        );
+
+        // if no course of this id
+        if (!client) return res.status(400).send("No client of this id exists.");
+
+        console.log(client);
+        res.send(client);
+    } catch (e) {
+        return res.status(400).send("No client of this id exists.");
+    }
+});
 
 // export router
 module.exports = router;

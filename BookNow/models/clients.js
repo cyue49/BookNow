@@ -127,6 +127,24 @@ function validateClientUpdate(client){
     return schema.validate(client);
 }
 
+// validate function for PUT new address
+function validateClientUpdateNewAddress(client){
+    const schema = Joi.object({
+        address: Joi.array().items({
+            unitNumber: Joi.number(),
+            streetNumber: Joi.number().required(),
+            streetName: Joi.string().required(),
+            city: Joi.string().required(),
+            province: Joi.string().pattern(/^[A-Z]{2}$/).required(),
+            country: Joi.string().required(),
+            postalCode: Joi.string().pattern(/^[A-Z][0-9][A-Z][0-9][A-Z][0-9]$/).required()
+        }).required()
+    });
+
+    return schema.validate(client);
+}
+
 exports.Client = Client;
 exports.validateAdd = validateClientAdd;
 exports.validateUpdate = validateClientUpdate;
+exports.validateUpdateNewAddress = validateClientUpdateNewAddress;
