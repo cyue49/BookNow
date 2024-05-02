@@ -89,7 +89,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // update client address
-router.put('/:id/addresses/:addrID', async (req, res) => {
+router.put('/:id/addresses/update/:addrID', async (req, res) => {
     // input validation
     const { error } = validateUpdate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
@@ -124,7 +124,7 @@ router.put('/:id/addresses/:addrID', async (req, res) => {
 });
 
 // add new client address
-router.put('/:id/addresses', async (req, res) => {
+router.put('/:id/addresses/add', async (req, res) => {
     // input validation
     const { error } = validateUpdateNewAddress(req.body);
     if (error) return res.status(400).send(error.details[0].message);
@@ -135,6 +135,28 @@ router.put('/:id/addresses', async (req, res) => {
             {
                 $push: {
                     address: req.body.address
+                }
+            }
+        );
+
+        // if no client of this id
+        if (!client) return res.status(400).send("No client of this id exists.");
+
+        console.log(client);
+        res.send(client);
+    } catch (e) {
+        return res.status(400).send("No client of this id exists.");
+    }
+});
+
+// delete a client address
+router.put('/:id/addresses/remove/:addrID', async (req, res) => {
+    try {
+        // find user to update
+        const client = await Client.findByIdAndUpdate(req.params.id,
+            {
+                $pull: {
+                    address: {_id: req.params.addrID}
                 }
             }
         );
