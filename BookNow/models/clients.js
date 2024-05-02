@@ -180,6 +180,9 @@ function validateClientUpdateNewAddress(client){
     return schema.validate(client);
 }
 
+// validate function for put new payment
+
+
 exports.Client = Client;
 exports.validateAdd = validateClientAdd;
 exports.validateUpdate = validateClientUpdate;

@@ -90,6 +90,7 @@ router.put('/:id', async (req, res) => {
     }
 });
 
+// ------------------------------------- Address -------------------------------------
 // update client address
 router.put('/:id/addresses/update/:addrID', async (req, res) => {
     // input validation
@@ -160,6 +161,39 @@ router.put('/:id/addresses/remove/:addrID', async (req, res) => {
                 $pull: {
                     address: {_id: req.params.addrID}
                 }
+            }
+        );
+
+        // if no client of this id
+        if (!client) return res.status(400).send("No client of this id exists.");
+
+        console.log(client);
+        res.send(client);
+    } catch (e) {
+        return res.status(400).send("No client of this id exists.");
+    }
+});
+
+// ------------------------------------- Payment -------------------------------------
+// update client payment
+router.put('/:id/payments/update/:payID', async (req, res) => {
+    // input validation
+    const { error } = validateUpdate(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    try {
+        // find user to update
+        const client = await Client.findByIdAndUpdate(req.params.id,
+            {
+                $set: {
+                    [`payment.$[pay].paymentMethod`]: req.body.payment[0].paymentMethod,
+                    [`payment.$[pay].cardNumber`]: req.body.payment[0].cardNumber,
+                    [`payment.$[pay].expirationDate`]: req.body.payment[0].expirationDate,
+                    [`payment.$[pay].cvv`]: req.body.payment[0].cvv
+                }
+            },
+            {
+                'arrayFilters': [{ "pay._id": req.params.payID }]
             }
         );
 
