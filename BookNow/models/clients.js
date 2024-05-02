@@ -10,25 +10,30 @@ const addressSchema = new mongoose.Schema({
     },
     streetName: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
     city: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
     province: {
         type: String,
         required: true,
         match: /^[A-Z]{2}$/,
+        trim: true
     },
     country: {
         type: String,
-        required: true
+        required: true,
+        trim: true,
     },
     postalCode: {
         type: String,
         required: true,
         match: /^[A-Z][0-9][A-Z][0-9][A-Z][0-9]$/,
+        trim: true
     }
 });
 
@@ -37,7 +42,8 @@ const paymentSchema = new mongoose.Schema({
     paymentMethod: {
         type: String,
         required: true,
-        enum: ['visa', 'mastercard']
+        enum: ['visa', 'mastercard'],
+        trim: true
     },
     cardNumber: {
         type: String,
@@ -51,7 +57,46 @@ const paymentSchema = new mongoose.Schema({
     cvv: {
         type: String,
         required: true,
-        match: /^[0-9]{3,4}$/
+        match: /^[0-9]{3,4}$/,
+        trim: true
+    }
+});
+
+// Recipient schema
+const recipientSchema = new mongoose.Schema({
+    firstName: {
+        type: String,
+        required: true,
+        minlength: 1,
+        maxlength: 50,
+        trim: true
+    },
+    lastName: {
+        type: String,
+        required: true,
+        minlength: 1,
+        maxlength: 50,
+        trim: true
+    },
+    email: {
+        type: String,
+        required: true,
+        minlength: 1,
+        maxlength: 50,
+        match: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+        lowercase: true,
+        trim: true
+    },
+    phone: {
+        type: String,
+        match: /^[0-9]{10}$/,
+        trim: true
+    },
+    relationship: {
+        type: String,
+        required: true,
+        enum: ['family', 'friend', 'other'],
+        trim: true
     }
 });
 
@@ -70,8 +115,7 @@ const Client = mongoose.model('client', new mongoose.Schema({
     phone: {
         type: String,
         match: /^[0-9]{10}$/,
-        trim: true,
-        unique: true
+        trim: true
     },
     firstName: {
         type: String,
