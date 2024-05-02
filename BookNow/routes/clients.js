@@ -264,6 +264,43 @@ router.put('/:id/payments/remove/:payID', async (req, res) => {
     }
 });
 
+// ------------------------------------- Recipient -------------------------------------
+// update client recipient
+router.put('/:id/recipients/update/:recID', async (req, res) => {
+    // input validation
+    const { error } = validateUpdate(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    try {
+        // find user to update
+        const client = await Client.findByIdAndUpdate(req.params.id,
+            {
+                $set: {
+                    [`recipient.$[rec].firstName`]: req.body.recipient[0].firstName,
+                    [`recipient.$[rec].lastName`]: req.body.recipient[0].lastName,
+                    [`recipient.$[rec].email`]: req.body.recipient[0].email,
+                    [`recipient.$[rec].phone`]: req.body.recipient[0].phone,
+                    [`recipient.$[rec].relationship`]: req.body.recipient[0].relationship,
+                    [`recipient.$[rec].gender`]: req.body.recipient[0].gender,
+                    [`recipient.$[rec].dateOfBirth`]: req.body.recipient[0].dateOfBirth,
+                    [`recipient.$[rec].medicalConditions`]: req.body.recipient[0].medicalConditions
+                }
+            },
+            {
+                'arrayFilters': [{ "rec._id": req.params.recID }]
+            }
+        );
+
+        // if no client of this id
+        if (!client) return res.status(400).send("No client of this id exists.");
+
+        console.log(client);
+        res.send(client);
+    } catch (e) {
+        return res.status(400).send("No client of this id exists.");
+    }
+});
+
 // ===================================== DELETE =====================================
 // delete a client user by id
 router.delete('/:id', async (req, res) => {
