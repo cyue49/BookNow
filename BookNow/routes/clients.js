@@ -25,6 +25,13 @@ router.get('/:id/addresses', async (req, res) => {
     res.send(addresses);
 });
 
+// get all payments for a client
+router.get('/:id/payments', async (req, res) => {
+    const payments = await Client.find({ _id: req.params.id }).select('payment');
+    console.log(payments);
+    res.send(payments);
+});
+
 // ===================================== POST =====================================
 // add a new client user
 router.post('/', async (req, res) => {
