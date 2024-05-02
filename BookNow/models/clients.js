@@ -155,11 +155,12 @@ const Client = mongoose.model('client', new mongoose.Schema({
         trim: true
     },
     address: [addressSchema],
-    payment: [paymentSchema]
+    payment: [paymentSchema],
+    recipient: [recipientSchema]
 }))
 
 // validate function for POST
-function validateClientAdd(client){
+function validateClientAdd(client) {
     const schema = Joi.object({
         email: Joi.string().pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/).required(),
         phone: Joi.string().pattern(/^[0-9]{10}$/).required(),
@@ -182,6 +183,16 @@ function validateClientAdd(client){
             cardNumber: Joi.string().pattern(/^[0-9]{16}$/).required(),
             expirationDate: Joi.date().required(),
             cvv: Joi.string().pattern(/^[0-9]{3,4}$/).required()
+        }),
+        recipient: Joi.array().items({
+            firstName: Joi.string().required(),
+            lastName: Joi.string().required(),
+            email: Joi.string().pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/),
+            phone: Joi.string().pattern(/^[0-9]{10}$/),
+            relationship: Joi.string().valid('family', 'friend', 'other').required(),
+            gender: Joi.string().valid('male', 'female', 'other'),
+            dateOfBirth: Joi.date().less('now'),
+            medicalConditions: Joi.string()
         })
     });
 
@@ -189,7 +200,7 @@ function validateClientAdd(client){
 }
 
 // validate function for PUT
-function validateClientUpdate(client){
+function validateClientUpdate(client) {
     const schema = Joi.object({
         email: Joi.string().pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/),
         phone: Joi.string().pattern(/^[0-9]{10}$/),
@@ -212,6 +223,16 @@ function validateClientUpdate(client){
             cardNumber: Joi.string().pattern(/^[0-9]{16}$/).required(),
             expirationDate: Joi.date().required(),
             cvv: Joi.string().pattern(/^[0-9]{3,4}$/).required()
+        }),
+        recipient: Joi.array().items({
+            firstName: Joi.string().required(),
+            lastName: Joi.string().required(),
+            email: Joi.string().pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/),
+            phone: Joi.string().pattern(/^[0-9]{10}$/),
+            relationship: Joi.string().valid('family', 'friend', 'other').required(),
+            gender: Joi.string().valid('male', 'female', 'other'),
+            dateOfBirth: Joi.date().less('now'),
+            medicalConditions: Joi.string()
         })
     });
 
@@ -219,7 +240,7 @@ function validateClientUpdate(client){
 }
 
 // validate function for PUT new address
-function validateClientUpdateNewAddress(client){
+function validateClientUpdateNewAddress(client) {
     const schema = Joi.object({
         address: Joi.array().items({
             unitNumber: Joi.number(),
@@ -236,7 +257,7 @@ function validateClientUpdateNewAddress(client){
 }
 
 // validate function for put new payment
-function validateClientUpdateNewPayment(client){
+function validateClientUpdateNewPayment(client) {
     const schema = Joi.object({
         payment: Joi.array().items({
             paymentMethod: Joi.string().valid('visa', 'mastercard').required(),

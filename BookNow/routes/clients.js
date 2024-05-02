@@ -49,7 +49,8 @@ router.post('/', async (req, res) => {
         dateOfBirth: req.body.dateOfBirth,
         medicalConditions: req.body.medicalConditions,
         address: req.body.address,
-        payment: req.body.payment
+        payment: req.body.payment,
+        recipient: req.body.recipient
     });
 
     try {
@@ -82,7 +83,8 @@ router.put('/:id', async (req, res) => {
                     dateOfBirth: req.body.dateOfBirth,
                     medicalConditions: req.body.medicalConditions,
                     address: req.body.address,
-                    payment: req.body.payment
+                    payment: req.body.payment,
+                    recipient: req.body.recipient
                 }
             }
         );
