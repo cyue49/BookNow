@@ -3,20 +3,23 @@ const { Client, validateAdd, validateUpdate, validateUpdateNewAddress } = requir
 const express = require('express');
 const router = express.Router();
 
-// GET
+// ===================================== GET =====================================
+// get all clients
 router.get('/', async (req, res) => {
     const clients = await Client.find();
     console.log(clients);
     res.send(clients);
 });
 
+// get a specific client by id
 router.get('/:id', async (req, res) => {
-    const clients = await Client.find({ _id: req.params.id });
-    console.log(clients);
-    res.send(clients);
+    const client = await Client.find({ _id: req.params.id });
+    console.log(client);
+    res.send(client);
 });
 
-// POST
+// ===================================== POST =====================================
+// add a new client user
 router.post('/', async (req, res) => {
     // input validation
     const { error } = validateAdd(req.body);
@@ -44,8 +47,8 @@ router.post('/', async (req, res) => {
     }
 });
 
-// PUT
-// update client info general
+// ===================================== PUT =====================================
+// update general client info
 router.put('/:id', async (req, res) => {
     // input validation
     const { error } = validateUpdate(req.body);
