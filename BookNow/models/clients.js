@@ -224,17 +224,24 @@ function validateClient(client, operation) {
 
     // update address
     const updateAddressSchema = Joi.object().keys({
-        addresses: addresses.required()
+        unitNumber, streetNumber, streetName, city, province, country, postalCode
     });
 
     // update payment
     const updatePaymentSchema = Joi.object().keys({
-        payments: payments.required()
+        paymentMethod, cardNumber, expirationDate, cvv
     });
 
     // update recipient
     const updateRecipientSchema = Joi.object().keys({
-        recipients: recipients.required()
+        firstName: recFirstName,
+        lastName: recLastName,
+        email: recEmail,
+        phone: recPhone,
+        relationship: recRelationship,
+        gender: recGender,
+        dateOfBirth: recDateOfBirth,
+        medicalConditions: recMedicalConditions
     });
 
     // validate based on operation

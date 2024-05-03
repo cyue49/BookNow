@@ -118,13 +118,13 @@ router.put('/:id/addresses/update/:addrID', async (req, res) => {
         const client = await Client.findByIdAndUpdate(req.params.id,
             {
                 $set: {
-                    [`addresses.$[addr].unitNumber`]: req.body.addresses[0].unitNumber,
-                    [`addresses.$[addr].streetNumber`]: req.body.addresses[0].streetNumber,
-                    [`addresses.$[addr].streetName`]: req.body.addresses[0].streetName,
-                    [`addresses.$[addr].city`]: req.body.addresses[0].city,
-                    [`addresses.$[addr].province`]: req.body.addresses[0].province,
-                    [`addresses.$[addr].country`]: req.body.addresses[0].country,
-                    [`addresses.$[addr].postalCode`]: req.body.addresses[0].postalCode
+                    [`addresses.$[addr].unitNumber`]: req.body.unitNumber,
+                    [`addresses.$[addr].streetNumber`]: req.body.streetNumber,
+                    [`addresses.$[addr].streetName`]: req.body.streetName,
+                    [`addresses.$[addr].city`]: req.body.city,
+                    [`addresses.$[addr].province`]: req.body.province,
+                    [`addresses.$[addr].country`]: req.body.country,
+                    [`addresses.$[addr].postalCode`]: req.body.postalCode
                 }
             },
             {
@@ -148,12 +148,23 @@ router.put('/:id/addresses/add', async (req, res) => {
     const { error } = validate(req.body, 'updateAddress');
     if (error) return res.status(400).send(error.details[0].message);
 
+    // create a new address
+    const address = {
+        unitNumber: parseInt(req.body.unitNumber),
+        streetNumber: parseInt(req.body.streetNumber),
+        streetName: req.body.streetName,
+        city: req.body.city,
+        province: req.body.province,
+        country: req.body.country,
+        postalCode: req.body.postalCode,
+    };
+
     try {
         // find user to update
         const client = await Client.findByIdAndUpdate(req.params.id,
             {
                 $push: {
-                    addresses: req.body.addresses
+                    addresses: address
                 }
             }
         );
@@ -202,10 +213,10 @@ router.put('/:id/payments/update/:payID', async (req, res) => {
         const client = await Client.findByIdAndUpdate(req.params.id,
             {
                 $set: {
-                    [`payments.$[pay].paymentMethod`]: req.body.payments[0].paymentMethod,
-                    [`payments.$[pay].cardNumber`]: req.body.payments[0].cardNumber,
-                    [`payments.$[pay].expirationDate`]: req.body.payments[0].expirationDate,
-                    [`payments.$[pay].cvv`]: req.body.payments[0].cvv
+                    [`payments.$[pay].paymentMethod`]: req.body.paymentMethod,
+                    [`payments.$[pay].cardNumber`]: req.body.cardNumber,
+                    [`payments.$[pay].expirationDate`]: req.body.expirationDate,
+                    [`payments.$[pay].cvv`]: req.body.cvv
                 }
             },
             {
@@ -229,12 +240,20 @@ router.put('/:id/payments/add', async (req, res) => {
     const { error } = validate(req.body, 'updatePayment');
     if (error) return res.status(400).send(error.details[0].message);
 
+    // create a new payment
+    const payment = {
+        paymentMethod: req.body.paymentMethod,
+        cardNumber: req.body.cardNumber,
+        expirationDate: req.body.expirationDate,
+        cvv: req.body.cvv
+    };
+
     try {
         // find user to update
         const client = await Client.findByIdAndUpdate(req.params.id,
             {
                 $push: {
-                    payments: req.body.payments
+                    payments: payment
                 }
             }
         );
@@ -283,14 +302,14 @@ router.put('/:id/recipients/update/:recID', async (req, res) => {
         const client = await Client.findByIdAndUpdate(req.params.id,
             {
                 $set: {
-                    [`recipients.$[rec].firstName`]: req.body.recipients[0].firstName,
-                    [`recipients.$[rec].lastName`]: req.body.recipients[0].lastName,
-                    [`recipients.$[rec].email`]: req.body.recipients[0].email,
-                    [`recipients.$[rec].phone`]: req.body.recipients[0].phone,
-                    [`recipients.$[rec].relationship`]: req.body.recipients[0].relationship,
-                    [`recipients.$[rec].gender`]: req.body.recipients[0].gender,
-                    [`recipients.$[rec].dateOfBirth`]: req.body.recipients[0].dateOfBirth,
-                    [`recipients.$[rec].medicalConditions`]: req.body.recipients[0].medicalConditions
+                    [`recipients.$[rec].firstName`]: req.body.firstName,
+                    [`recipients.$[rec].lastName`]: req.body.lastName,
+                    [`recipients.$[rec].email`]: req.body.email,
+                    [`recipients.$[rec].phone`]: req.body.phone,
+                    [`recipients.$[rec].relationship`]: req.body.relationship,
+                    [`recipients.$[rec].gender`]: req.body.gender,
+                    [`recipients.$[rec].dateOfBirth`]: req.body.dateOfBirth,
+                    [`recipients.$[rec].medicalConditions`]: req.body.medicalConditions
                 }
             },
             {
@@ -314,12 +333,24 @@ router.put('/:id/recipients/add', async (req, res) => {
     const { error } = validate(req.body, 'updateRecipient');
     if (error) return res.status(400).send(error.details[0].message);
 
+    // create a new recipient
+    const recipient = {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        email: req.body.email,
+        phone: req.body.phone,
+        relationship: req.body.relationship,
+        gender: req.body.dateOfBirth,
+        dateOfBirth: req.body.dateOfBirth,
+        medicalConditions: req.body.medicalConditions
+    };
+
     try {
         // find user to update
         const client = await Client.findByIdAndUpdate(req.params.id,
             {
                 $push: {
-                    recipients: req.body.recipients
+                    recipients: recipient
                 }
             }
         );
