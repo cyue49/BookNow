@@ -20,23 +20,74 @@ router.get('/:id', async (req, res) => {
 
 // get all addresses for a client
 router.get('/:id/addresses', async (req, res) => {
-    const addresses = await Client.find({ _id: req.params.id }).select('address');
+    const addresses = await Client.find({ _id: req.params.id }).select('addresses');
     console.log(addresses);
     res.send(addresses);
 });
 
+// get a specific address for a client
+router.get('/:id/addresses/:addrID', async (req, res) => {
+    const address = await Client.find({
+        _id: req.params.id
+    },
+    {
+        addresses: {
+            "$elemMatch": {
+                "_id": req.params.addrID
+            }
+        }
+    }
+);
+    console.log(address);
+    res.send(address);
+});
+
 // get all payments for a client
 router.get('/:id/payments', async (req, res) => {
-    const payments = await Client.find({ _id: req.params.id }).select('payment');
+    const payments = await Client.find({ _id: req.params.id }).select('payments');
     console.log(payments);
     res.send(payments);
 });
 
+// get a specific payment for a client
+router.get('/:id/payments/:payID', async (req, res) => {
+    const payment = await Client.find({
+        _id: req.params.id
+    },
+    {
+        payments: {
+            "$elemMatch": {
+                "_id": req.params.payID
+            }
+        }
+    }
+);
+    console.log(payment);
+    res.send(payment);
+});
+
 // get all recipients for a client
 router.get('/:id/recipients', async (req, res) => {
-    const recipients = await Client.find({ _id: req.params.id }).select('recipient');
+    const recipients = await Client.find({ _id: req.params.id }).select('recipients');
     console.log(recipients);
     res.send(recipients);
+});
+
+// get a specific recipient for a client
+router.get('/:id/recipients/:recID', async (req, res) => {
+    const recipient = await Client.find({
+        _id: req.params.id
+    },
+    {
+        recipients: {
+            "$elemMatch": {
+                "_id": req.params.recID
+            }
+        }
+    }
+);
+    console.log(recipient);
+    res.send(recipient);
 });
 
 // ===================================== POST =====================================
@@ -55,9 +106,9 @@ router.post('/', async (req, res) => {
         gender: req.body.gender,
         dateOfBirth: req.body.dateOfBirth,
         medicalConditions: req.body.medicalConditions,
-        address: req.body.address,
-        payment: req.body.payment,
-        recipient: req.body.recipient
+        addresses: req.body.addresses,
+        payments: req.body.payments,
+        recipients: req.body.recipients
     });
 
     try {
@@ -89,9 +140,9 @@ router.put('/:id', async (req, res) => {
                     gender: req.body.gender,
                     dateOfBirth: req.body.dateOfBirth,
                     medicalConditions: req.body.medicalConditions,
-                    address: req.body.address,
-                    payment: req.body.payment,
-                    recipient: req.body.recipient
+                    addresses: req.body.addresses,
+                    payments: req.body.payments,
+                    recipients: req.body.recipients
                 }
             }
         );
@@ -118,13 +169,13 @@ router.put('/:id/addresses/update/:addrID', async (req, res) => {
         const client = await Client.findByIdAndUpdate(req.params.id,
             {
                 $set: {
-                    [`address.$[addr].unitNumber`]: req.body.address[0].unitNumber,
-                    [`address.$[addr].streetNumber`]: req.body.address[0].streetNumber,
-                    [`address.$[addr].streetName`]: req.body.address[0].streetName,
-                    [`address.$[addr].city`]: req.body.address[0].city,
-                    [`address.$[addr].province`]: req.body.address[0].province,
-                    [`address.$[addr].country`]: req.body.address[0].country,
-                    [`address.$[addr].postalCode`]: req.body.address[0].postalCode
+                    [`addresses.$[addr].unitNumber`]: req.body.unitNumber,
+                    [`addresses.$[addr].streetNumber`]: req.body.streetNumber,
+                    [`addresses.$[addr].streetName`]: req.body.streetName,
+                    [`addresses.$[addr].city`]: req.body.city,
+                    [`addresses.$[addr].province`]: req.body.province,
+                    [`addresses.$[addr].country`]: req.body.country,
+                    [`addresses.$[addr].postalCode`]: req.body.postalCode
                 }
             },
             {
@@ -148,12 +199,23 @@ router.put('/:id/addresses/add', async (req, res) => {
     const { error } = validate(req.body, 'updateAddress');
     if (error) return res.status(400).send(error.details[0].message);
 
+    // create a new address
+    const address = {
+        unitNumber: parseInt(req.body.unitNumber),
+        streetNumber: parseInt(req.body.streetNumber),
+        streetName: req.body.streetName,
+        city: req.body.city,
+        province: req.body.province,
+        country: req.body.country,
+        postalCode: req.body.postalCode,
+    };
+
     try {
         // find user to update
         const client = await Client.findByIdAndUpdate(req.params.id,
             {
                 $push: {
-                    address: req.body.address
+                    addresses: address
                 }
             }
         );
@@ -175,7 +237,7 @@ router.put('/:id/addresses/remove/:addrID', async (req, res) => {
         const client = await Client.findByIdAndUpdate(req.params.id,
             {
                 $pull: {
-                    address: {_id: req.params.addrID}
+                    addresses: {_id: req.params.addrID}
                 }
             }
         );
@@ -202,10 +264,10 @@ router.put('/:id/payments/update/:payID', async (req, res) => {
         const client = await Client.findByIdAndUpdate(req.params.id,
             {
                 $set: {
-                    [`payment.$[pay].paymentMethod`]: req.body.payment[0].paymentMethod,
-                    [`payment.$[pay].cardNumber`]: req.body.payment[0].cardNumber,
-                    [`payment.$[pay].expirationDate`]: req.body.payment[0].expirationDate,
-                    [`payment.$[pay].cvv`]: req.body.payment[0].cvv
+                    [`payments.$[pay].paymentMethod`]: req.body.paymentMethod,
+                    [`payments.$[pay].cardNumber`]: req.body.cardNumber,
+                    [`payments.$[pay].expirationDate`]: req.body.expirationDate,
+                    [`payments.$[pay].cvv`]: req.body.cvv
                 }
             },
             {
@@ -229,12 +291,20 @@ router.put('/:id/payments/add', async (req, res) => {
     const { error } = validate(req.body, 'updatePayment');
     if (error) return res.status(400).send(error.details[0].message);
 
+    // create a new payment
+    const payment = {
+        paymentMethod: req.body.paymentMethod,
+        cardNumber: req.body.cardNumber,
+        expirationDate: req.body.expirationDate,
+        cvv: req.body.cvv
+    };
+
     try {
         // find user to update
         const client = await Client.findByIdAndUpdate(req.params.id,
             {
                 $push: {
-                    payment: req.body.payment
+                    payments: payment
                 }
             }
         );
@@ -256,7 +326,7 @@ router.put('/:id/payments/remove/:payID', async (req, res) => {
         const client = await Client.findByIdAndUpdate(req.params.id,
             {
                 $pull: {
-                    payment: {_id: req.params.payID}
+                    payments: {_id: req.params.payID}
                 }
             }
         );
@@ -283,14 +353,14 @@ router.put('/:id/recipients/update/:recID', async (req, res) => {
         const client = await Client.findByIdAndUpdate(req.params.id,
             {
                 $set: {
-                    [`recipient.$[rec].firstName`]: req.body.recipient[0].firstName,
-                    [`recipient.$[rec].lastName`]: req.body.recipient[0].lastName,
-                    [`recipient.$[rec].email`]: req.body.recipient[0].email,
-                    [`recipient.$[rec].phone`]: req.body.recipient[0].phone,
-                    [`recipient.$[rec].relationship`]: req.body.recipient[0].relationship,
-                    [`recipient.$[rec].gender`]: req.body.recipient[0].gender,
-                    [`recipient.$[rec].dateOfBirth`]: req.body.recipient[0].dateOfBirth,
-                    [`recipient.$[rec].medicalConditions`]: req.body.recipient[0].medicalConditions
+                    [`recipients.$[rec].firstName`]: req.body.firstName,
+                    [`recipients.$[rec].lastName`]: req.body.lastName,
+                    [`recipients.$[rec].email`]: req.body.email,
+                    [`recipients.$[rec].phone`]: req.body.phone,
+                    [`recipients.$[rec].relationship`]: req.body.relationship,
+                    [`recipients.$[rec].gender`]: req.body.gender,
+                    [`recipients.$[rec].dateOfBirth`]: req.body.dateOfBirth,
+                    [`recipients.$[rec].medicalConditions`]: req.body.medicalConditions
                 }
             },
             {
@@ -314,12 +384,24 @@ router.put('/:id/recipients/add', async (req, res) => {
     const { error } = validate(req.body, 'updateRecipient');
     if (error) return res.status(400).send(error.details[0].message);
 
+    // create a new recipient
+    const recipient = {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        email: req.body.email,
+        phone: req.body.phone,
+        relationship: req.body.relationship,
+        gender: req.body.dateOfBirth,
+        dateOfBirth: req.body.dateOfBirth,
+        medicalConditions: req.body.medicalConditions
+    };
+
     try {
         // find user to update
         const client = await Client.findByIdAndUpdate(req.params.id,
             {
                 $push: {
-                    recipient: req.body.recipient
+                    recipients: recipient
                 }
             }
         );
@@ -341,7 +423,7 @@ router.put('/:id/recipients/remove/:recID', async (req, res) => {
         const client = await Client.findByIdAndUpdate(req.params.id,
             {
                 $pull: {
-                    recipient: {_id: req.params.recID}
+                    recipients: {_id: req.params.recID}
                 }
             }
         );

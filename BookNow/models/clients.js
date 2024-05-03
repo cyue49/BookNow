@@ -154,10 +154,10 @@ const Client = mongoose.model('client', new mongoose.Schema({
         maxlength: 500,
         trim: true
     },
-    address: [addressSchema],
-    payment: [paymentSchema],
-    recipient: [recipientSchema]
-}))
+    addresses: [addressSchema],
+    payments: [paymentSchema],
+    recipients: [recipientSchema]
+}));
 
 function validateClient(client, operation) {
     // user 
@@ -195,9 +195,9 @@ function validateClient(client, operation) {
     const recMedicalConditions = Joi.string();
 
     // arrays
-    const address = Joi.array().items({ unitNumber, streetNumber, streetName, city, province, country, postalCode });
-    const payment = Joi.array().items({ paymentMethod, cardNumber, expirationDate, cvv });
-    const recipient = Joi.array().items({
+    const addresses = Joi.array().items({ unitNumber, streetNumber, streetName, city, province, country, postalCode });
+    const payments = Joi.array().items({ paymentMethod, cardNumber, expirationDate, cvv });
+    const recipients = Joi.array().items({
         firstName: recFirstName,
         lastName: recLastName,
         email: recEmail,
@@ -208,33 +208,41 @@ function validateClient(client, operation) {
         medicalConditions: recMedicalConditions
     });
 
+    // ===================================== SCHEMAS =====================================
     // create user
     const createUserSchema = Joi.object().keys({
         email: email.required(),
         phone: phone.required(),
         firstName: firstName.required(),
         lastName: lastName.required(),
-        gender, dateOfBirth, medicalConditions, address, payment, recipient
+        gender, dateOfBirth, medicalConditions, addresses, payments, recipients
     });
 
     // update user
     const updateUserSchema = Joi.object().keys({
-        email, phone, firstName, lastName, gender, dateOfBirth, medicalConditions, address, payment, recipient
+        email, phone, firstName, lastName, gender, dateOfBirth, medicalConditions, addresses, payments, recipients
     });
 
     // update address
     const updateAddressSchema = Joi.object().keys({
-        address: address.required()
+        unitNumber, streetNumber, streetName, city, province, country, postalCode
     });
 
     // update payment
     const updatePaymentSchema = Joi.object().keys({
-        payment: payment.required()
+        paymentMethod, cardNumber, expirationDate, cvv
     });
 
     // update recipient
     const updateRecipientSchema = Joi.object().keys({
-        recipient: recipient.required()
+        firstName: recFirstName,
+        lastName: recLastName,
+        email: recEmail,
+        phone: recPhone,
+        relationship: recRelationship,
+        gender: recGender,
+        dateOfBirth: recDateOfBirth,
+        medicalConditions: recMedicalConditions
     });
 
     // validate based on operation
