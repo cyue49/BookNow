@@ -11,6 +11,16 @@ router.get('/', async (req, res) => {
     res.send(bookings);
 });
 
+// get all bookings including provider/client/service info
+router.get('/showInfo', async (req, res) => {
+    const bookings = await Booking.find()
+    .populate('client')
+    .populate('provider')
+    .populate('service');
+    console.log(bookings);
+    res.send(bookings);
+});
+
 // ===================================== POST =====================================
 // add a new booking
 router.post('/', async (req, res) => {
