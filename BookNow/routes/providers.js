@@ -88,5 +88,41 @@ router.put('/:id', async (req, res) => {
     }
 });
 
+// ------------------------------------- Address -------------------------------------
+// update provider address
+router.put('/:id/addresses/update/:addrID', async (req, res) => {
+    // input validation
+    const { error } = validate(req.body, 'updateAddress');
+    if (error) return res.status(400).send(error.details[0].message);
+
+    try {
+        // find user to update
+        const provider = await Provider.findByIdAndUpdate(req.params.id,
+            {
+                $set: {
+                    [`addresses.$[addr].unitNumber`]: req.body.addresses[0].unitNumber,
+                    [`addresses.$[addr].streetNumber`]: req.body.addresses[0].streetNumber,
+                    [`addresses.$[addr].streetName`]: req.body.addresses[0].streetName,
+                    [`addresses.$[addr].city`]: req.body.addresses[0].city,
+                    [`addresses.$[addr].province`]: req.body.addresses[0].province,
+                    [`addresses.$[addr].country`]: req.body.addresses[0].country,
+                    [`addresses.$[addr].postalCode`]: req.body.addresses[0].postalCode
+                }
+            },
+            {
+                'arrayFilters': [{ "addr._id": req.params.addrID }]
+            }
+        );
+
+        // if no provider of this id
+        if (!provider) return res.status(400).send("No provider of this id exists.");
+
+        console.log(provider);
+        res.send(provider);
+    } catch (e) {
+        return res.status(400).send("No provider of this id exists.");
+    }
+});
+
 // export router
 module.exports = router;

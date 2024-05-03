@@ -119,12 +119,19 @@ function validateProvider(provider, operation) {
         email, phone, firstName, lastName, gender, dateOfBirth, bio, addresses
     });
 
+    // update address
+    const updateAddressSchema = Joi.object().keys({
+        addresses: addresses.required()
+    });
+
     // validate based on operation
     switch (operation) {
         case 'createProvider':
             return createUserSchema.validate(provider);
         case 'updateProvider':
             return updateUserSchema.validate(provider);
+        case 'updateAddress':
+            return updateAddressSchema.validate(provider);
         default:
             throw new Error("Error: wrong operation");
     }
