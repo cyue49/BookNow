@@ -18,6 +18,20 @@ router.get('/providers', async (req, res) => {
     res.send(availabilities);
 });
 
+// get all availabilities for a provider
+router.get('/providers/:provID', async (req, res) => {
+    const availabilities = await Availability.find({provider: req.params.provID});
+    console.log(availabilities);
+    res.send(availabilities);
+});
+
+// get all availabilities for a provider at a specific date
+router.get('/providers/:provID/:date', async (req, res) => {
+    const availabilities = await Availability.find({provider: req.params.provID, date: req.params.date});
+    console.log(availabilities);
+    res.send(availabilities);
+});
+
 // ===================================== POST =====================================
 // add a new availability
 router.post('/', async (req, res) => {
