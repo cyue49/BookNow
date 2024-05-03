@@ -24,22 +24,38 @@ const Availability = mongoose.model('availability', new mongoose.Schema({
     availableHours: [hoursSchema],
 }));
 
-function validateAvailability(availability) {
+function validateAvailability(availability, operation) {
     // availability
-    const provider = Joi.string().hex().length(24).required();
-    const date = Joi.date().required();
+    const provider = Joi.string().hex().length(24);
+    const date = Joi.date();
 
     // hourly availability
     const hour = Joi.number().min(0).max(24).required();
 
     // arrays
-    const availableHours = Joi.array().items({ hour}).required();
+    const availableHours = Joi.array().items({ hour});
 
-    const validateAvailabilitySchema = Joi.object().keys({
+    // create availability
+    const createAvailabilitySchema = Joi.object().keys({
+        provider: provider.required(),
+        date: date.required(),
+        availableHours: availableHours.required()
+    });
+
+    // update availability
+    const updateAvailabilitySchema = Joi.object().keys({
         provider, date, availableHours
     });
 
-    return validateAvailabilitySchema.validate(availability);
+    // validate based on operation
+    switch (operation) {
+        case 'createAvailability':
+            return createAvailabilitySchema.validate(availability);
+        case 'updateAvailability':
+            return updateAvailabilitySchema.validate(availability);
+        default:
+            throw new Error("Error: wrong operation");
+    }
 }
 
 exports.Availability = Availability;

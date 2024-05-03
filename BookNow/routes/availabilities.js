@@ -36,7 +36,7 @@ router.get('/providers/:provID/:date', async (req, res) => {
 // add a new availability
 router.post('/', async (req, res) => {
     // input validation
-    const { error } = validate(req.body);
+    const { error } = validate(req.body, 'createAvailability');
     if (error) return res.status(400).send(error.details[0].message);
 
     // create a new availability
@@ -53,6 +53,35 @@ router.post('/', async (req, res) => {
     } catch (ex) {
         console.log(ex.message);
         res.status(400).send(ex.message);
+    }
+});
+
+// ===================================== PUT =====================================
+// update availability info
+router.put('/:id', async (req, res) => {
+    // input validation
+    const { error } = validate(req.body, 'updateAvailability');
+    if (error) return res.status(400).send(error.details[0].message);
+
+    try {
+        // find availability to update
+        const availability = await Availability.findByIdAndUpdate(req.params.id,
+            {
+                $set: {
+                    provider: req.body.provider,
+                    date: req.body.date,
+                    availableHours: req.body.availableHours
+                }
+            }
+        );
+
+        // if no availability of this id
+        if (!availability) return res.status(400).send("No availability of this id exists.");
+
+        console.log(availability);
+        res.send(availability);
+    } catch (e) {
+        return res.status(400).send("No availability of this id exists.");
     }
 });
 
