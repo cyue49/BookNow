@@ -3,6 +3,7 @@ const dbString = require('./config');
 const clients = require('./routes/clients');
 const providers = require('./routes/providers');
 const availabilities = require('./routes/availabilities');
+const services = require('./routes/services');
 const express = require('express');
 const app = express();
 
@@ -20,6 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/clients', clients);
 app.use('/api/providers', providers);
 app.use('/api/availabilities', availabilities);
+app.use('/api/services', services);
 
 // host and port
 const hostname = '127.0.0.1';
