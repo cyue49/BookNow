@@ -72,6 +72,23 @@ router.get('/provider/:id/showInfo', async (req, res) => {
     res.send(bookings);
 });
 
+// get all bookings at a specific date
+router.get('/date/:date', async (req, res) => {
+    const bookings = await Booking.find({ date: req.params.date });
+    console.log(bookings);
+    res.send(bookings);
+});
+
+// get all bookings at a specific date including provider/client/service info
+router.get('/date/:date/showInfo', async (req, res) => {
+    const bookings = await Booking.find({ date: req.params.date })
+        .populate('client')
+        .populate('provider')
+        .populate('service');
+    console.log(bookings);
+    res.send(bookings);
+});
+
 // ===================================== POST =====================================
 // add a new booking
 router.post('/', async (req, res) => {
