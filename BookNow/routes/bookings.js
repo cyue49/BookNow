@@ -14,11 +14,28 @@ router.get('/', async (req, res) => {
 // get all bookings including provider/client/service info
 router.get('/showInfo', async (req, res) => {
     const bookings = await Booking.find()
-    .populate('client')
-    .populate('provider')
-    .populate('service');
+        .populate('client')
+        .populate('provider')
+        .populate('service');
     console.log(bookings);
     res.send(bookings);
+});
+
+// get a specific bookings by id
+router.get('/:id', async (req, res) => {
+    const booking = await Booking.find({ _id: req.params.id });
+    console.log(booking);
+    res.send(booking);
+});
+
+// get a specific bookings by id including provider/client/service info
+router.get('/:id/showInfo', async (req, res) => {
+    const booking = await Booking.find({ _id: req.params.id })
+        .populate('client')
+        .populate('provider')
+        .populate('service');
+    console.log(booking);
+    res.send(booking);
 });
 
 // ===================================== POST =====================================
