@@ -100,13 +100,13 @@ router.put('/:id/addresses/update/:addrID', async (req, res) => {
         const provider = await Provider.findByIdAndUpdate(req.params.id,
             {
                 $set: {
-                    [`addresses.$[addr].unitNumber`]: req.body.addresses[0].unitNumber,
-                    [`addresses.$[addr].streetNumber`]: req.body.addresses[0].streetNumber,
-                    [`addresses.$[addr].streetName`]: req.body.addresses[0].streetName,
-                    [`addresses.$[addr].city`]: req.body.addresses[0].city,
-                    [`addresses.$[addr].province`]: req.body.addresses[0].province,
-                    [`addresses.$[addr].country`]: req.body.addresses[0].country,
-                    [`addresses.$[addr].postalCode`]: req.body.addresses[0].postalCode
+                    [`addresses.$[addr].unitNumber`]: req.body.unitNumber,
+                    [`addresses.$[addr].streetNumber`]: req.body.streetNumber,
+                    [`addresses.$[addr].streetName`]: req.body.streetName,
+                    [`addresses.$[addr].city`]: req.body.city,
+                    [`addresses.$[addr].province`]: req.body.province,
+                    [`addresses.$[addr].country`]: req.body.country,
+                    [`addresses.$[addr].postalCode`]: req.body.postalCode
                 }
             },
             {
@@ -130,12 +130,23 @@ router.put('/:id/addresses/add', async (req, res) => {
     const { error } = validate(req.body, 'updateAddress');
     if (error) return res.status(400).send(error.details[0].message);
 
+    // create a new address
+    const address = {
+        unitNumber: parseInt(req.body.unitNumber),
+        streetNumber: parseInt(req.body.streetNumber),
+        streetName: req.body.streetName,
+        city: req.body.city,
+        province: req.body.province,
+        country: req.body.country,
+        postalCode: req.body.postalCode,
+    };
+
     try {
         // find user to update
         const provider = await Provider.findByIdAndUpdate(req.params.id,
             {
                 $push: {
-                    addresses: req.body.addresses
+                    addresses: address
                 }
             }
         );

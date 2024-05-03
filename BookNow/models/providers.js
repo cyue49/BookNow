@@ -121,7 +121,7 @@ function validateProvider(provider, operation) {
 
     // update address
     const updateAddressSchema = Joi.object().keys({
-        addresses: addresses.required()
+        unitNumber, streetNumber, streetName, city, province, country, postalCode
     });
 
     // validate based on operation
