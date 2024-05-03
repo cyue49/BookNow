@@ -124,5 +124,53 @@ router.put('/:id/addresses/update/:addrID', async (req, res) => {
     }
 });
 
+// add new provider address
+router.put('/:id/addresses/add', async (req, res) => {
+    // input validation
+    const { error } = validate(req.body, 'updateAddress');
+    if (error) return res.status(400).send(error.details[0].message);
+
+    try {
+        // find user to update
+        const provider = await Provider.findByIdAndUpdate(req.params.id,
+            {
+                $push: {
+                    addresses: req.body.addresses
+                }
+            }
+        );
+
+        // if no provider of this id
+        if (!provider) return res.status(400).send("No provider of this id exists.");
+
+        console.log(provider);
+        res.send(provider);
+    } catch (e) {
+        return res.status(400).send("No provider of this id exists.");
+    }
+});
+
+// delete a provider address
+router.put('/:id/addresses/remove/:addrID', async (req, res) => {
+    try {
+        // find user to update
+        const provider = await Provider.findByIdAndUpdate(req.params.id,
+            {
+                $pull: {
+                    addresses: {_id: req.params.addrID}
+                }
+            }
+        );
+
+        // if no provider of this id
+        if (!provider) return res.status(400).send("No provider of this id exists.");
+
+        console.log(provider);
+        res.send(provider);
+    } catch (e) {
+        return res.status(400).send("No provider of this id exists.");
+    }
+});
+
 // export router
 module.exports = router;
