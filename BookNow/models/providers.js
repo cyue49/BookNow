@@ -80,8 +80,8 @@ const Provider = mongoose.model('provider', new mongoose.Schema({
         minlength: 1,
         maxlength: 500
     },
-    addresses: [addressSchema],
-}))
+    addresses: [addressSchema]
+}));
 
 function validateProvider(provider, operation) {
     // user 
