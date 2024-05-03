@@ -68,6 +68,11 @@ const Provider = mongoose.model('provider', new mongoose.Schema({
         maxlength: 50,
         trim: true
     },
+    service: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'service',
+        required: true
+    },
     gender: {
         type: String,
         enum: ['male', 'female', 'other']
@@ -89,6 +94,7 @@ function validateProvider(provider, operation) {
     const phone = Joi.string().pattern(/^[0-9]{10}$/);
     const firstName = Joi.string();
     const lastName = Joi.string();
+    const service = Joi.string().hex().length(24);
     const gender = Joi.string().valid('male', 'female', 'other');
     const dateOfBirth = Joi.date().less('now');
     const bio = Joi.string();
@@ -111,12 +117,13 @@ function validateProvider(provider, operation) {
         phone: phone.required(),
         firstName: firstName.required(),
         lastName: lastName.required(),
+        service: service.required(),
         gender, dateOfBirth, bio, addresses
     });
 
     // update user
     const updateUserSchema = Joi.object().keys({
-        email, phone, firstName, lastName, gender, dateOfBirth, bio, addresses
+        email, phone, firstName, lastName, service, gender, dateOfBirth, bio, addresses
     });
 
     // update address
