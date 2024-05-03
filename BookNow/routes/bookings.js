@@ -38,6 +38,40 @@ router.get('/:id/showInfo', async (req, res) => {
     res.send(booking);
 });
 
+// get all bookings for a client
+router.get('/client/:id', async (req, res) => {
+    const bookings = await Booking.find({ client: req.params.id });
+    console.log(bookings);
+    res.send(bookings);
+});
+
+// get all bookings for a client including provider/client/service info
+router.get('/client/:id/showInfo', async (req, res) => {
+    const bookings = await Booking.find({ client: req.params.id })
+        .populate('client')
+        .populate('provider')
+        .populate('service');
+    console.log(bookings);
+    res.send(bookings);
+});
+
+// get all bookings for a provider
+router.get('/provider/:id', async (req, res) => {
+    const bookings = await Booking.find({ provider: req.params.id });
+    console.log(bookings);
+    res.send(bookings);
+});
+
+// get all bookings for a provider including provider/client/service info
+router.get('/provider/:id/showInfo', async (req, res) => {
+    const bookings = await Booking.find({ provider: req.params.id })
+        .populate('client')
+        .populate('provider')
+        .populate('service');
+    console.log(bookings);
+    res.send(bookings);
+});
+
 // ===================================== POST =====================================
 // add a new booking
 router.post('/', async (req, res) => {
