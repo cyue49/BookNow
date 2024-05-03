@@ -25,6 +25,23 @@ router.get('/:id/addresses', async (req, res) => {
     res.send(addresses);
 });
 
+// get a specific address for a client
+router.get('/:id/addresses/:addrID', async (req, res) => {
+    const address = await Client.find({
+        _id: req.params.id
+    },
+    {
+        addresses: {
+            "$elemMatch": {
+                "_id": req.params.addrID
+            }
+        }
+    }
+);
+    console.log(address);
+    res.send(address);
+});
+
 // get all payments for a client
 router.get('/:id/payments', async (req, res) => {
     const payments = await Client.find({ _id: req.params.id }).select('payments');
@@ -32,11 +49,45 @@ router.get('/:id/payments', async (req, res) => {
     res.send(payments);
 });
 
+// get a specific payment for a client
+router.get('/:id/payments/:payID', async (req, res) => {
+    const payment = await Client.find({
+        _id: req.params.id
+    },
+    {
+        payments: {
+            "$elemMatch": {
+                "_id": req.params.payID
+            }
+        }
+    }
+);
+    console.log(payment);
+    res.send(payment);
+});
+
 // get all recipients for a client
 router.get('/:id/recipients', async (req, res) => {
     const recipients = await Client.find({ _id: req.params.id }).select('recipients');
     console.log(recipients);
     res.send(recipients);
+});
+
+// get a specific recipient for a client
+router.get('/:id/recipients/:recID', async (req, res) => {
+    const recipient = await Client.find({
+        _id: req.params.id
+    },
+    {
+        recipients: {
+            "$elemMatch": {
+                "_id": req.params.recID
+            }
+        }
+    }
+);
+    console.log(recipient);
+    res.send(recipient);
 });
 
 // ===================================== POST =====================================
