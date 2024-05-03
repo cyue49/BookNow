@@ -111,6 +111,7 @@ function validateProvider(provider, operation) {
     // arrays
     const addresses = Joi.array().items({ unitNumber, streetNumber, streetName, city, province, country, postalCode });
 
+    // ===================================== SCHEMAS =====================================
     // create user
     const createUserSchema = Joi.object().keys({
         email: email.required(),

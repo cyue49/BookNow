@@ -23,14 +23,15 @@ function validateService(service, operation) {
     const description = Joi.string();
     const price = Joi.number();
 
-    // schema for create service
+    // ===================================== SCHEMAS =====================================
+    // create service
     const createServiceSchema = Joi.object().keys({
         name: name.required(),
         description: description.required(),
         price: price.required()
     });
 
-    // schema for update service
+    // update service
     const updateServiceSchema = Joi.object().keys({
         name, description, price
     });

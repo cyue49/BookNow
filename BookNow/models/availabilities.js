@@ -35,6 +35,7 @@ function validateAvailability(availability, operation) {
     // arrays
     const availableHours = Joi.array().items({ hour });
 
+    // ===================================== SCHEMAS =====================================
     // create availability
     const createAvailabilitySchema = Joi.object().keys({
         provider: provider.required(),

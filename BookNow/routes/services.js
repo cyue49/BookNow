@@ -72,7 +72,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // ===================================== DELETE =====================================
-// delete a service user by id
+// delete a service by id
 router.delete('/:id', async (req, res) => {
     try {
         const service = await Service.findByIdAndDelete(req.params.id);

@@ -208,6 +208,7 @@ function validateClient(client, operation) {
         medicalConditions: recMedicalConditions
     });
 
+    // ===================================== SCHEMAS =====================================
     // create user
     const createUserSchema = Joi.object().keys({
         email: email.required(),
