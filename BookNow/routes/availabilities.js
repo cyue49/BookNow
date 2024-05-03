@@ -85,5 +85,59 @@ router.put('/:id', async (req, res) => {
     }
 });
 
+// ------------------------------------- Hours -------------------------------------
+// add new availability hour
+router.put('/:id/hours/add', async (req, res) => {
+    // input validation
+    const { error } = validate(req.body, 'updateAvailabilityHour');
+    if (error) return res.status(400).send(error.details[0].message);
+
+    // create a new hour
+    const availableHour = {
+        hour: parseInt(req.body.hour)
+    };
+
+    try {
+        // find availability to update
+        const availability = await Availability.findByIdAndUpdate(req.params.id,
+            {
+                $push: {
+                    availableHours: availableHour
+                }
+            }
+        );
+
+        // if no availability of this id
+        if (!availability) return res.status(400).send("No availability of this id exists.");
+
+        console.log(availability);
+        res.send(availability);
+    } catch (e) {
+        return res.status(400).send("No availability of this id exists.");
+    }
+});
+
+// delete an availability hour
+router.put('/:id/hours/remove/:hourID', async (req, res) => {
+    try {
+        // find availability to update
+        const availability = await Availability.findByIdAndUpdate(req.params.id,
+            {
+                $pull: {
+                    availableHours: {_id: req.params.hourID}
+                }
+            }
+        );
+
+        // if no availability of this id
+        if (!availability) return res.status(400).send("No availability of this id exists.");
+
+        console.log(availability);
+        res.send(availability);
+    } catch (e) {
+        return res.status(400).send("No availability of this id exists.");
+    }
+});
+
 // export router
 module.exports = router;
