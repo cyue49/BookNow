@@ -11,9 +11,23 @@ router.get('/', async (req, res) => {
     res.send(providers);
 });
 
+// get all providers including service info
+router.get('/showService', async (req, res) => {
+    const providers = await Provider.find().populate('service');
+    console.log(providers);
+    res.send(providers);
+});
+
 // get a specific provider by id
 router.get('/:id', async (req, res) => {
     const provider = await Provider.find({ _id: req.params.id });
+    console.log(provider);
+    res.send(provider);
+});
+
+// get a specific provider by id including service info
+router.get('/showService/:id', async (req, res) => {
+    const provider = await Provider.find({ _id: req.params.id }).populate('service');
     console.log(provider);
     res.send(provider);
 });
