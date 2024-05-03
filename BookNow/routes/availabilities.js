@@ -139,5 +139,19 @@ router.put('/:id/hours/remove/:hourID', async (req, res) => {
     }
 });
 
+// ===================================== DELETE =====================================
+// delete an availability by id
+router.delete('/:id', async (req, res) => {
+    try {
+        const availability = await Availability.findByIdAndDelete(req.params.id);
+
+        if (!availability) return res.status(400).send("No availability of this id exists.");
+        console.log(availability);
+        res.send(availability);
+    } catch (e) {
+        return res.status(400).send("No availability of this id exists.");
+    }
+});
+
 // export router
 module.exports = router;
