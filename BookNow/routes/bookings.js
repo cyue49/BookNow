@@ -26,7 +26,7 @@ router.post('/', async (req, res) => {
         date: req.body.date,
         address: req.body.address,
         payment: req.body.payment,
-        recipient: req.body.recipient,
+        recipient: req.body.recipient
     });
 
     try {
@@ -36,6 +36,53 @@ router.post('/', async (req, res) => {
     } catch (ex) {
         console.log(ex.message);
         res.status(400).send(ex.message);
+    }
+});
+
+// ===================================== PUT =====================================
+// update booking info
+router.put('/:id', async (req, res) => {
+    // input validation
+    const { error } = validate(req.body, 'updateBooking');
+    if (error) return res.status(400).send(error.details[0].message);
+
+    try {
+        // find booking to update
+        const booking = await Booking.findByIdAndUpdate(req.params.id,
+            {
+                $set: {
+                    client: req.body.client,
+                    provider: req.body.provider,
+                    service: req.body.service,
+                    date: req.body.date,
+                    address: req.body.address,
+                    payment: req.body.payment,
+                    recipient: req.body.recipient
+                }
+            }
+        );
+
+        // if no booking of this id
+        if (!booking) return res.status(400).send("No booking of this id exists.");
+
+        console.log(booking);
+        res.send(booking);
+    } catch (e) {
+        return res.status(400).send("No booking of this id exists.");
+    }
+});
+
+// ===================================== DELETE =====================================
+// delete a booking by id
+router.delete('/:id', async (req, res) => {
+    try {
+        const booking = await Booking.findByIdAndDelete(req.params.id);
+
+        if (!booking) return res.status(400).send("No booking of this id exists.");
+        console.log(booking);
+        res.send(booking);
+    } catch (e) {
+        return res.status(400).send("No booking of this id exists.");
     }
 });
 
