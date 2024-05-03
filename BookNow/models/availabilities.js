@@ -19,7 +19,9 @@ const Availability = mongoose.model('availability', new mongoose.Schema({
         required: true
     },
     date: {
-        type: Date
+        type: String,
+        match: /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/,
+        trim: true
     },
     availableHours: [hoursSchema],
 }));
@@ -27,7 +29,7 @@ const Availability = mongoose.model('availability', new mongoose.Schema({
 function validateAvailability(availability, operation) {
     // availability
     const provider = Joi.string().hex().length(24);
-    const date = Joi.date();
+    const date = Joi.string().pattern(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/);
 
     // hourly availability
     const hour = Joi.number().min(0).max(24).required();
