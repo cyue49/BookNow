@@ -183,5 +183,19 @@ router.put('/:id/addresses/remove/:addrID', async (req, res) => {
     }
 });
 
+// ===================================== DELETE =====================================
+// delete a provider user by id
+router.delete('/:id', async (req, res) => {
+    try {
+        const provider = await Provider.findByIdAndDelete(req.params.id);
+
+        if (!provider) return res.status(400).send("No provider of this id exists.");
+        console.log(provider);
+        res.send(provider);
+    } catch (e) {
+        return res.status(400).send("No provider of this id exists.");
+    }
+});
+
 // export router
 module.exports = router;
