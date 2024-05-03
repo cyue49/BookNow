@@ -11,6 +11,13 @@ router.get('/', async (req, res) => {
     res.send(services);
 });
 
+// get a specific service by id
+router.get('/:id', async (req, res) => {
+    const service = await Service.find({ _id: req.params.id });
+    console.log(service);
+    res.send(service);
+});
+
 // ===================================== POST =====================================
 // add a new service
 router.post('/', async (req, res) => {
