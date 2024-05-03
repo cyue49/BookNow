@@ -35,5 +35,47 @@ router.post('/', async (req, res) => {
     }
 });
 
+// ===================================== PUT =====================================
+// update service info
+router.put('/:id', async (req, res) => {
+    // input validation
+    const { error } = validate(req.body, 'updateService');
+    if (error) return res.status(400).send(error.details[0].message);
+
+    try {
+        // find service to update
+        const service = await Service.findByIdAndUpdate(req.params.id,
+            {
+                $set: {
+                    name: req.body.name,
+                    description: req.body.description,
+                    price: req.body.price
+                }
+            }
+        );
+
+        // if no service of this id
+        if (!service) return res.status(400).send("No service of this id exists.");
+
+        console.log(service);
+        res.send(service);
+    } catch (e) {
+        return res.status(400).send("No service of this id exists.");
+    }
+});
+
+// ===================================== DELETE =====================================
+// delete a service user by id
+router.delete('/:id', async (req, res) => {
+    try {
+        const service = await Service.findByIdAndDelete(req.params.id);
+
+        if (!service) return res.status(400).send("No service of this id exists.");
+        console.log(service);
+        res.send(service);
+    } catch (e) {
+        return res.status(400).send("No service of this id exists.");
+    }
+});
 // export router
 module.exports = router;
