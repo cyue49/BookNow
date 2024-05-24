@@ -4,7 +4,9 @@
 
 ---
 
-Book now is a service that connects clients with providers of in-home health services. Both clients and providers can create an account, and clients can book appointments with providers based on the services offered, the date and time, and the availabilities of the providers.
+Book now is a web application service that connects clients with providers of in-home health services. Both clients and providers can create an account, and clients can book appointments with providers based on the services offered, the date and time, and the availabilities of the providers.
+
+The server-side of the application and the API for handling the different GET, POST, PUT, and DELETE requests are built using Node.js, and the frontend will be built using React (work in progress).
 
 ### Usage
 
@@ -32,5 +34,5 @@ Different requests for clients, providers, availabilities, services, and booking
 
 ---
 
-* Node.js and express are used to handle the requests and routes.
+* Node.js and express are used to build the API to handle the different requests and routes.
 * MongoDB and mongoose are used to store the data in the database.
